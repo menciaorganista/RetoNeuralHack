@@ -12,3 +12,7 @@ reports/
 
 # OS
 .DS_Store
+
+# Model
+weights/*.pt
+
