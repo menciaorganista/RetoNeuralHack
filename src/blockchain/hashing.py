@@ -1,15 +1,3 @@
-# src/blockchain/integrity.py
-"""
-Deterministic hashing for (A): each analysis is unique (timestamp inside hash).
-
-- analysis_payload includes timestamp_utc
-- analysis_hash = SHA256(canonical_json(analysis_payload))
-- evidence_record is what adapter.register() consumes
-
-Rule:
-- To verify, you MUST keep the original analysis_payload (or at least the exact timestamp_utc).
-"""
-
 from __future__ import annotations
 
 import hashlib
