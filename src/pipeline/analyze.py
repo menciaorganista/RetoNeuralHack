@@ -24,10 +24,8 @@ def analyze_scene(
     """
     weights = weights or DEFAULT_WEIGHTS
 
-    # 1) Deteccion con vuestro modelo
     analysis = run_inference(image_path, detector_model_path, conf_threshold=conf_det)
 
-    # 2) Tipologia por recorte
     img = cv2.imread(str(image_path))
     type_model = YOLO(str(typology_model_path))
 
@@ -37,16 +35,13 @@ def analyze_scene(
         det["typology"] = typ
         det["typology_confidence"] = typ_conf
 
-    # 3) Guardar outputs visuales + json detecciones
     save_outputs(image_path, analysis)
     det_json_path = ANALYSIS_DIR / f"{image_path.stem}.json"
 
-    # 4) Metricas base (conteo/densidad/ocupacion)
     run_metrics_main(det_json_path, image_path)
     bundle_path = ANALYSIS_DIR / f"{image_path.stem}_bundle.json"
     bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
 
-    # 5) Metricas avanzadas (tipologia + pesos)
     dets = bundle["detections"]["detections"]
     typ_counts = count_by_typology(dets)
     score = impact_score(dets, weights)
@@ -57,10 +52,8 @@ def analyze_scene(
     bundle["metrics"]["congestion_index"] = cong
     bundle["metrics"]["impact_weights"] = weights
 
-    # Guardar bundle actualizado
     bundle_path.write_text(json.dumps(bundle, indent=2), encoding="utf-8")
 
-    # 6) Evidencia
     add_evidence_main(bundle_path)
     evidence_path = ANALYSIS_DIR / f"{image_path.stem}_bundle_evidence.json"
     bundle_evidence = json.loads(evidence_path.read_text(encoding="utf-8"))

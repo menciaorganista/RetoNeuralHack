@@ -15,10 +15,8 @@ def run_inference(
     Ejecuta inferencia YOLO sobre una imagen y devuelve las detecciones.
     """
 
-    # Cargar modelo
     model = YOLO(str(model_path))
 
-    # Inferencia
     results = model.predict(
         source=str(image_path),
         conf=conf_threshold,
@@ -57,7 +55,6 @@ def save_outputs(image_path: Path, analysis: dict):
     Guarda imagen con bounding boxes y JSON de análisis.
     """
 
-    # Cargar imagen
     img = cv2.imread(str(image_path))
 
     for det in analysis["detections"]:
@@ -80,11 +77,9 @@ def save_outputs(image_path: Path, analysis: dict):
         )
 
 
-    # Guardar imagen
     out_img = RUNS_DIR / image_path.name
     cv2.imwrite(str(out_img), img)
 
-    # Guardar JSON
     out_json = ANALYSIS_DIR / f"{image_path.stem}.json"
     with open(out_json, "w") as f:
         json.dump(analysis, f, indent=2)

@@ -21,5 +21,4 @@ def impact_score(detections: list[dict], weights: dict) -> float:
     return total
 
 def congestion_index(density_per_megapixel: float, occupancy_ratio: float) -> float:
-    # Simple, explicable: mezcla de densidad y ocupacion
     return 0.7 * float(density_per_megapixel) + 0.3 * float(occupancy_ratio) * 100.0

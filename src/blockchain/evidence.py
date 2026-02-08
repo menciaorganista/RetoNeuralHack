@@ -10,8 +10,6 @@ def build_evidence_record(bundle: dict[str, Any], scene_id: str) -> dict[str, An
         "analysis_hash": h["sha256"],
         "scene_id": scene_id,
         "created_utc": h["timestamp_utc"],
-        # Keep full payload in local ledger; on-chain only analysis_hash + scene_id + version/prefix
         "bundle": bundle,
-        # Optional: store canonical used to hash for reproducibility/debug
         "bundle_canonical": h["canonical_json"],
     }

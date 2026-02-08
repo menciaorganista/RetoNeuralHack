@@ -18,6 +18,7 @@ El sistema combina visión artificial, métricas de movilidad y generación de e
 4. Generación de evidencia:
    - Hash SHA-256
    - Marca temporal UTC
+   - Almacenamiento Blockchain
 5. Visualización web con Streamlit.
 
 ---

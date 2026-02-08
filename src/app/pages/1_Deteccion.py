@@ -1,4 +1,3 @@
-# src/app/pages/1_Deteccion.py
 from pathlib import Path
 import tempfile
 import time

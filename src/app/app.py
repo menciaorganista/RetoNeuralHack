@@ -1,4 +1,3 @@
-# src/app/app.py
 import streamlit as st
 
 from src.app.ui_helpers import (

@@ -1,4 +1,3 @@
-# src/blockchain/register.py
 from __future__ import annotations
 
 from typing import Any
@@ -27,7 +26,6 @@ def register_evidence(bundle: dict[str, Any]) -> dict[str, Any]:
         "model_version": bundle.get("model_version", "MyE_v1"),
     }
 
-    # Optional: attempt on-chain registration
     chain = register_on_chain(evidence_record)
 
     return {

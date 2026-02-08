@@ -1,4 +1,3 @@
-# src/blockchain/bsv_client.py
 from __future__ import annotations
 
 import asyncio
@@ -10,7 +9,6 @@ import requests
 
 from src import config
 
-# Optional dependency: do not break the app if not installed
 try:
     from bsv import ARC, P2PKH, PrivateKey, Script, Transaction, TransactionInput, TransactionOutput
     _BSV_AVAILABLE = True
@@ -42,7 +40,6 @@ def _woc_get_text(path: str) -> str:
 
 
 def _pick_utxo(address: str, min_sats: int = 600) -> dict[str, Any] | None:
-    # WhatsOnChain: /address/{address}/unspent
     utxos = _woc_get_json(f"address/{address}/unspent")
     if not isinstance(utxos, list) or len(utxos) == 0:
         return None
@@ -56,7 +53,6 @@ def _pick_utxo(address: str, min_sats: int = 600) -> dict[str, Any] | None:
 
 
 async def _broadcast_with_arc(tx: Transaction, arc_url: str, arc_api_key: str | None) -> None:
-    # bsv-sdk supports broadcasting; ARC broadcaster can be passed
     if arc_api_key:
         broadcaster = ARC(arc_url, arc_api_key)
     else:
@@ -82,7 +78,6 @@ def register_on_chain(evidence_record: dict[str, Any]) -> dict[str, Any]:
     if arc_url == "":
         return {"status": "failed", "error": "ARC_URL missing in config.py"}
 
-    # Some ARC deployments require an API key; keep optional.
     arc_api_key_cfg = (getattr(config, "ARC_API_KEY", "") or "").strip()
     arc_api_key_env = (os.getenv("ARC_API_KEY", "") or "").strip()
     arc_api_key = arc_api_key_cfg or arc_api_key_env or None
@@ -90,14 +85,12 @@ def register_on_chain(evidence_record: dict[str, Any]) -> dict[str, Any]:
     prefix = (os.getenv("MYE_OPRETURN_PREFIX", "MYE|EVID|v1|") or "MYE|EVID|v1|").strip()
 
     try:
-        # Correct py-sdk usage: instantiate from WIF string
-        priv = PrivateKey(wif)  # :contentReference[oaicite:1]{index=1}
+        priv = PrivateKey(wif)  
         addr = getattr(config, "BSV_ADDRESS", "") or ""
         addr = addr.strip() if isinstance(addr, str) else ""
         if addr == "":
             addr = str(priv.address())
 
-        # 1) Get a spendable UTXO
         utxo = _pick_utxo(addr, min_sats=600)
         if utxo is None:
             return {
@@ -112,11 +105,9 @@ def register_on_chain(evidence_record: dict[str, Any]) -> dict[str, Any]:
         if not src_txid:
             return {"status": "failed", "error": "WhatsOnChain UTXO missing tx_hash"}
 
-        # 2) Fetch raw tx hex containing that UTXO
         source_tx_hex = _woc_get_text(f"tx/{src_txid}/hex").strip()
-        source_tx = Transaction.from_hex(source_tx_hex)  # :contentReference[oaicite:2]{index=2}
+        source_tx = Transaction.from_hex(source_tx_hex)
 
-        # 3) Build tx: spend UTXO -> OP_RETURN + change
         tx_in = TransactionInput(
             source_transaction=source_tx,
             source_txid=source_tx.txid(),
@@ -136,7 +127,6 @@ def register_on_chain(evidence_record: dict[str, Any]) -> dict[str, Any]:
         tx.fee()
         tx.sign()
 
-        # 4) Broadcast with ARC
         asyncio.run(_broadcast_with_arc(tx, arc_url, arc_api_key))
 
         return {

@@ -1,4 +1,3 @@
-# src/app/pages/2_Analitica.py
 import streamlit as st
 import pandas as pd
 import cv2

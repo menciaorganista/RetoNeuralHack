@@ -1,4 +1,3 @@
-# src/app/ui_helpers.py
 from __future__ import annotations
 
 import streamlit as st
@@ -296,5 +295,4 @@ def sidebar_block() -> None:
 
 
 def card(*args, **kwargs):
-    # Keep legacy code working; returns plain container (no border).
     return st.container()

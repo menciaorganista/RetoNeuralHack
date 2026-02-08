@@ -1,4 +1,3 @@
-# src/app/pages/4_Trazabilidad.py
 import json
 import streamlit as st
 
