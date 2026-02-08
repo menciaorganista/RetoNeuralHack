@@ -1,26 +1,15 @@
-
-from __future__ import annotations
-
+import streamlit as st
 import hashlib
 import json
-import sys
 import tempfile
-from pathlib import Path
-from typing import Any, Dict, Tuple
-
 import altair as alt
 import pandas as pd
-import streamlit as st
-from PIL import Image
+from pathlib import Path
 
-# Project root (kept as in your previous app)
-ROOT = Path(__file__).resolve().parents[2]
-sys.path.append(str(ROOT))
+st.set_page_config(page_title="MyE", layout="wide")
 
-from src.vision.infer import run_inference, save_outputs  # noqa: E402
-from src.pipeline.run_metrics import main as run_metrics_main  # noqa: E402
-from src.pipeline.add_evidence import main as add_evidence_main  # noqa: E402
-from src.config import RUNS_DIR, ANALYSIS_DIR  # noqa: E402
+st.sidebar.title("MyE")
+st.sidebar.caption("Vehicle Detection System")
 
 
 # -----------------------------
