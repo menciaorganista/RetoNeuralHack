@@ -4,7 +4,7 @@ import cv2
 from ultralytics import YOLO
 
 from src.vision.infer import run_inference, save_outputs
-from src.vision.typology import crop_with_padding, classify_typology_crop
+from src.vision.tipology import crop_with_padding, classify_typology_crop
 from src.pipeline.run_metrics import main as run_metrics_main
 from src.pipeline.add_evidence import main as add_evidence_main
 from src.metrics.impact import DEFAULT_WEIGHTS, count_by_typology, impact_score, congestion_index

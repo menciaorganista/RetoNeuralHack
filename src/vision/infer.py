@@ -35,12 +35,15 @@ def run_inference(
             cls_id = int(b.cls.item())
             conf = float(b.conf.item())
             x1, y1, x2, y2 = map(float, b.xyxy[0])
+            class_name = model.names[cls_id]
 
             detections.append({
                 "class_id": cls_id,
+                "class_name": class_name,
                 "confidence": conf,
                 "bbox_xyxy": [x1, y1, x2, y2]
             })
+
 
     return {
         "image": image_path.name,
@@ -61,16 +64,21 @@ def save_outputs(image_path: Path, analysis: dict):
         x1, y1, x2, y2 = map(int, det["bbox_xyxy"])
         conf = det["confidence"]
 
+        label = f"{det['class_name']} {conf:.2f}"
+
         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+
         cv2.putText(
             img,
-            f"{conf:.2f}",
+            label,
             (x1, y1 - 5),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.5,
             (0, 255, 0),
             1
         )
+
 
     # Guardar imagen
     out_img = RUNS_DIR / image_path.name
