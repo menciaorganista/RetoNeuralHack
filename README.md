@@ -45,6 +45,6 @@ pip install -r requirements.txt
 
 ## Ejecución
 
-streamlit run src/app/app.py
+PYTHONPATH=. python -m streamlit run src/app/app.py
 
 ---

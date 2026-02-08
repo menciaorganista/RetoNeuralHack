@@ -11,7 +11,7 @@ from typing import Any
 
 import requests
 
-import config
+from src import config
 
 
 logger = logging.getLogger(__name__)

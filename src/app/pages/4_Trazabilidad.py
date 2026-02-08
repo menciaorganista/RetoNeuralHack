@@ -1,11 +1,17 @@
-import streamlit as st
+# src/app/pages/4_Trazabilidad.py
 import json
+import streamlit as st
 
 from src.app.state import load_last
-from src.evidence.hashing import hash_bundle
-from src.evidence.register import register_evidence
+from src.blockchain.register import register_evidence
 
-st.header("Trazabilidad")
+st.markdown("""
+<div class="mye-card">
+  <h2 style="margin:0;">Trazabilidad</h2>
+  <div style="opacity:0.85;">Hash + timestamp + registro on-chain (si esta disponible)</div>
+</div>
+""", unsafe_allow_html=True)
+st.write("")
 
 run = load_last()
 if not run:
@@ -14,34 +20,42 @@ if not run:
 
 bundle = run["bundle"]
 
-# 1) Minimo garantizado: hash + timestamp
-e = hash_bundle(bundle)
+# Compute evidence now (local always, on-chain optional)
+result = register_evidence(bundle)
+evidence = result.get("evidence", {})
+chain = result.get("chain", {})
+
+# Big block 1
+st.markdown('<div class="mye-card">', unsafe_allow_html=True)
+st.subheader("Evidencia (hash del analisis)")
+st.write("Este hash permite verificar la integridad del bundle.")
+st.code(str(evidence.get("analysis_hash", "")))
+st.markdown("</div>", unsafe_allow_html=True)
+
+st.write("")
+
+# Big block 2
+st.markdown('<div class="mye-card">', unsafe_allow_html=True)
+st.subheader("Timestamp y registro")
 
 c1, c2 = st.columns(2)
 with c1:
-    st.text("Analysis hash (sha256)")
-    st.code(e["sha256"])
-
-with c2:
     st.text("Timestamp UTC")
-    st.code(e["timestamp_utc"])
+    st.code(str(evidence.get("timestamp_utc", "")))
+with c2:
+    st.text("Scene ID / Model")
+    st.code(f'{evidence.get("scene_id","unknown")} | {evidence.get("model_version","MyE_v1")}')
 
+st.write("")
+st.text("Resultado on-chain")
+st.code(json.dumps(chain, indent=2) if chain else "Sin datos")
+
+st.write("")
 st.download_button(
     "Descargar comprobante (JSON)",
-    data=json.dumps({"analysis_hash": e["sha256"], "timestamp_utc": e["timestamp_utc"]}, indent=2).encode("utf-8"),
-    file_name="mye_evidence_min.json",
-    mime="application/json"
+    data=json.dumps(result, indent=2).encode("utf-8"),
+    file_name="mye_evidence_onchain.json",
+    mime="application/json",
+    use_container_width=True
 )
-
-st.divider()
-
-# 2) Intento de registro on-chain (opcional)
-st.subheader("Registro (opcional)")
-if st.button("Registrar en blockchain"):
-    try:
-        result = register_evidence(bundle)
-        st.success("Registro completado.")
-        st.json(result)
-    except Exception as ex:
-        st.warning("No se pudo registrar on-chain. El hash y timestamp ya quedan generados.")
-        st.code(str(ex))
+st.markdown("</div>", unsafe_allow_html=True)

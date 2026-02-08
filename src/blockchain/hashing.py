@@ -116,3 +116,11 @@ def build_evidence_record(
 def verify_integrity(analysis_payload: dict[str, Any], expected_hash: str) -> bool:
     """Recompute and compare."""
     return compute_hash(analysis_payload) == expected_hash
+
+def hash_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
+    ts = datetime.now(timezone.utc).isoformat()
+    return {
+        "sha256": compute_hash(bundle),
+        "timestamp_utc": ts
+    }
+
