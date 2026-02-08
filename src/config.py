@@ -24,3 +24,17 @@ for path in [
     ANALYSIS_DIR
 ]:
     path.mkdir(parents=True, exist_ok=True)
+
+
+# ============================================================
+# BLOCKCHAIN / BSV
+# ============================================================
+BSV_NETWORK = "main"
+WOC_BASE = "https://api.whatsonchain.com/v1/bsv/main"
+
+BSV_PRIVATE_KEY = "L4DArgykDjNHg1UvvSiEB1qK7RkcayJQ9ZypuDeKGWhvMEmZsmHt"  # empty = local-only mode
+
+ARC_URL = "https://arc.gorillapool.io"
+
+
+LEDGER_PATH = DATA_DIR / "evidence_ledger.jsonl"

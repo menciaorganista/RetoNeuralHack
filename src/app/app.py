@@ -26,7 +26,7 @@ from src.config import RUNS_DIR, ANALYSIS_DIR  # noqa: E402
 # -----------------------------
 # Page + styles
 # -----------------------------
-st.set_page_config(page_title="Traffic Metrics Analyzer", layout="wide")
+st.set_page_config(page_title="MyE Traffic UAV", layout="wide")
 
 st.markdown(
     """
@@ -279,19 +279,15 @@ init_state()
 # -----------------------------
 # Header
 # -----------------------------
-st.markdown('<div class="title-wrap"><h1>Traffic Metrics Analyzer</h1></div>', unsafe_allow_html=True)
+st.markdown('<div class="title-wrap"><h1>MyE - Sistema Inteligente de Analisis de Trafico (UAV)</h1></div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle-wrap">Sube una imagen y pulsa Analizar para obtener metricas de trafico.</div>',
     unsafe_allow_html=True,
 )
 
-# Minimal config in sidebar (kept like your previous app, but compact)
-st.sidebar.header("Configuracion")
-model_path = st.sidebar.text_input(
-    "Ruta del modelo (.pt)",
-    value=str(Path("weights/MyE_best.pt").resolve()),
-)
-conf = st.sidebar.slider("Confianza minima", 0.05, 0.90, 0.25, 0.05)
+model_path = Path("weights/MyE_best.pt").resolve()
+conf = 0.45
+
 
 uploaded = st.file_uploader("Imagen", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
 

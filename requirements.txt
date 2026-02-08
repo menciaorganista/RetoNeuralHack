@@ -7,3 +7,4 @@ scipy
 streamlit
 pyyaml
 requests
+bsv-sdk
