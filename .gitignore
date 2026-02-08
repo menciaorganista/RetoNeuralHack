@@ -14,5 +14,6 @@ reports/
 .DS_Store
 
 # Model
+weights/
 weights/*.pt
 
